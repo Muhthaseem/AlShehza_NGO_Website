@@ -13,9 +13,9 @@ The main navigation is ordered as follows:
 3. **Our Story** (`about.html`) — The foundation’s purpose, approach, community programs, values, and vision.
 4. **Contact** (`contact.html`) — Founder and President details and the foundation’s contact links.
 
-The Our Work page includes per-project photo carousels where photos are available. Carousels can advance automatically or be controlled with the on-screen arrows, indicator buttons, and keyboard arrow keys. Automatic movement pauses when a carousel is out of view, the browser tab is hidden, or reduced motion is enabled. Qurban and Quran profiles currently use illustrations because project photos have not been supplied.
+The Our Work page includes per-project photo carousels where photos are available. Carousels can advance automatically or be controlled with the on-screen arrows, indicator buttons, keyboard arrow keys, and a pause/play button. Automatic movement pauses when a carousel is out of view, the browser tab is hidden, or reduced motion is enabled. Qurban and Quran profiles currently use illustrations because project photos have not been supplied.
 
-The homepage slideshow uses supplied project photographs. Motion effects throughout the site respect the operating system’s reduced-motion preference.
+The homepage slideshow uses supplied project photographs and includes a pause/play control. Motion effects throughout the site respect the operating system’s reduced-motion preference.
 
 ## Technology
 
@@ -36,7 +36,7 @@ The homepage slideshow uses supplied project photographs. Motion effects through
 | Burnt Orange | Secondary accent | `#C45A3E` |
 | Warm Ivory | Main background | `#F7F5EB` |
 
-The shared palette and organization settings are maintained in `js/site-config.js` and reflected in the design tokens in `css/style.css`.
+The shared palette and organization settings are maintained in `js/site-config.js` and reflected in the design tokens in `css/style.css`. Deep Teal is used for most text and controls. Contrast-safe supporting shades (`#AD4030`, `#E3B66C`, and `#173B46`) are used for small accent text on ivory, teal, and gold surfaces where the official brand colors do not provide sufficient contrast.
 
 ## Requirements
 

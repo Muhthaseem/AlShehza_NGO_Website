@@ -5,6 +5,18 @@ import { describe, expect, it } from 'vitest';
 import { projects } from '../js/projects-data.js';
 import { siteConfig } from '../js/site-config.js';
 
+function contrastRatio(foreground, background) {
+  const luminance = color => {
+    const channels = [1, 3, 5].map(index => parseInt(color.slice(index, index + 2), 16) / 255);
+    const linear = channels.map(channel => channel <= 0.04045
+      ? channel / 12.92
+      : ((channel + 0.055) / 1.055) ** 2.4);
+    return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+  };
+  const values = [luminance(foreground), luminance(background)];
+  return (Math.max(...values) + 0.05) / (Math.min(...values) + 0.05);
+}
+
 describe('site content configuration', () => {
   it('presents the foundation story and its core initiatives', () => {
     const aboutPage = readFileSync(join(process.cwd(), 'about.html'), 'utf8');
@@ -47,11 +59,35 @@ describe('site content configuration', () => {
     expect(siteConfig.theme).toMatchObject({
       primary: '#1E4653',
       accent: '#CD4E3C',
+      accentText: '#AD4030',
       accentLight: '#DC9C47',
       accentDark: '#C45A3E',
       warmIvory: '#F7F5EB',
     });
     expect(siteConfig.pages.home.stats[0].value).toBe('2021');
+    const styles = readFileSync(join(process.cwd(), 'css', 'style.css'), 'utf8');
+    expect(styles).toContain('--clr-primary: #1E4653;');
+    expect(styles).toContain('--clr-gold: #CD4E3C;');
+    expect(styles).toContain('--clr-brand-gold: #DC9C47;');
+    expect(styles).toContain('--clr-gold-on-dark: #E3B66C;');
+    expect(styles).not.toContain('color: var(--clr-gold);');
+    expect(styles).not.toMatch(/#1B3654|#2C4E70|#4B6F7A|#88B29C|#D8C7A7|#557767|#64777A|#7B8989/i);
+    expect(contrastRatio(siteConfig.theme.primary, siteConfig.theme.warmIvory)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(siteConfig.theme.accentText, siteConfig.theme.warmIvory)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#E3B66C', siteConfig.theme.primary)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio('#173B46', '#DC9C47')).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('lets visitors pause automatic project photography', () => {
+    const homePage = readFileSync(join(process.cwd(), 'index.html'), 'utf8');
+    const homeScript = readFileSync(join(process.cwd(), 'js', 'content-pages.js'), 'utf8');
+    const projectsScript = readFileSync(join(process.cwd(), 'js', 'projects-page.js'), 'utf8');
+    expect(homePage).toContain('id="homeSlideshowToggle"');
+    expect(homeScript).toContain('requires a pause control');
+    expect(homeScript).toContain('userPaused');
+    expect(projectsScript).toContain('work-carousel__pause');
+    expect(projectsScript).toContain('userPaused');
+    expect(projectsScript).toContain('reducedMotionQuery.addEventListener');
   });
 
   it('uses consistent, readable type across navigation and page copy', () => {
@@ -107,6 +143,8 @@ describe('site content configuration', () => {
     expect(contactPage).not.toContain('page-intro__inner');
     expect(projectsPage).not.toContain('projectModal');
     expect(projectsScript).toContain('work-carousel__arrow');
+    expect(projectsScript).toContain('work-carousel__pause');
+    expect(projectsScript).toContain('firstImage.classList.add(\'is-active\')');
     expect(projectsScript).toContain('work-carousel__dot');
     expect(projectsScript).toContain('setTimeout(() => showImage(1), 4800)');
     expect(projectsScript).toMatch(/updateIndicators\(\);\s+scheduleAdvance\(\);/);

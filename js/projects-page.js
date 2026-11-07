@@ -29,6 +29,7 @@ function createCarousel(project) {
   });
   let activeImageLayer = 0;
   const firstImage = imageLayers[activeImageLayer];
+  firstImage.classList.add('is-active');
   firstImage.src = project.images[0];
   firstImage.alt = `${project.title} — photo 1 of ${project.images.length}`;
   firstImage.loading = project.order <= 2 ? 'eager' : 'lazy';
@@ -51,6 +52,11 @@ function createCarousel(project) {
   next.className = 'work-carousel__arrow';
   next.setAttribute('aria-label', `Next ${project.title} photo`);
   next.textContent = '→';
+  const pause = document.createElement('button');
+  pause.type = 'button';
+  pause.className = 'work-carousel__pause';
+  pause.textContent = 'Pause';
+  pause.setAttribute('aria-label', `Pause automatic ${project.title} photos`);
   const indicators = document.createElement('div');
   indicators.className = 'work-carousel__indicators';
   indicators.setAttribute('role', 'group');
@@ -65,12 +71,25 @@ function createCarousel(project) {
     return dot;
   });
   controls.append(previous, indicators, next);
+  figure.append(pause);
   visual.append(figure, controls);
 
   let imageIndex = 0;
   let autoAdvance;
   let isVisible = false;
   let motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let userPaused = false;
+  const updatePauseControl = () => {
+    pause.disabled = !motionAllowed || project.images.length < 2;
+    pause.setAttribute('aria-label', motionAllowed
+      ? `${userPaused ? 'Play' : 'Pause'} automatic ${project.title} photos`
+      : `Automatic ${project.title} photos are paused for reduced motion`);
+    pause.textContent = !motionAllowed || project.images.length < 2
+      ? 'Paused'
+      : userPaused
+        ? 'Play'
+        : 'Pause';
+  };
   const updateIndicators = () => {
     dots.forEach((dot, index) => {
       if (index === imageIndex) {
@@ -85,7 +104,7 @@ function createCarousel(project) {
   };
   const scheduleAdvance = () => {
     window.clearTimeout(autoAdvance);
-    if (isVisible && motionAllowed && project.images.length > 1 && !document.hidden) {
+    if (isVisible && motionAllowed && !userPaused && project.images.length > 1 && !document.hidden) {
       autoAdvance = window.setTimeout(() => showImage(1), 4800);
     }
   };
@@ -138,8 +157,15 @@ function createCarousel(project) {
   const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   reducedMotionQuery.addEventListener('change', event => {
     motionAllowed = !event.matches;
+    updatePauseControl();
     scheduleAdvance();
   });
+  pause.addEventListener('click', () => {
+    userPaused = !userPaused;
+    updatePauseControl();
+    scheduleAdvance();
+  });
+  updatePauseControl();
   document.addEventListener('visibilitychange', scheduleAdvance);
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(([entry]) => {

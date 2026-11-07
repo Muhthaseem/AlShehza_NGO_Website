@@ -48,6 +48,11 @@ export function initializeHeroProjectSlideshow() {
   const container = document.getElementById('homeProjectSlideshow');
   if (!container) return;
 
+  const pauseButton = document.getElementById('homeSlideshowToggle');
+  if (!pauseButton) {
+    throw new Error('The homepage project slideshow requires a pause control.');
+  }
+
   const photos = Object.values(projects).flatMap(project => project.images);
   if (!photos.length) {
     throw new Error('The homepage project slideshow requires at least one project photo.');
@@ -79,11 +84,23 @@ export function initializeHeroProjectSlideshow() {
 
   const layers = [firstLayer, secondLayer];
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (reducedMotion.matches || photos.length < 2) return;
-
   let photoIndex = 0;
   let activeLayer = 0;
   let timer;
+  let userPaused = false;
+
+  const updatePauseControl = () => {
+    pauseButton.disabled = reducedMotion.matches || photos.length < 2;
+    const label = reducedMotion.matches
+      ? 'Paused for reduced motion'
+      : photos.length < 2
+        ? 'Background photos are still'
+        : userPaused
+          ? 'Play background photos'
+          : 'Pause background photos';
+    pauseButton.textContent = label;
+    pauseButton.setAttribute('aria-label', label);
+  };
 
   const showNextPhoto = () => {
     if (document.hidden || reducedMotion.matches) return;
@@ -110,15 +127,23 @@ export function initializeHeroProjectSlideshow() {
     image.src = photoSequence[nextIndex];
   };
 
-  const pauseSlideshow = () => window.clearTimeout(timer);
-  const resumeSlideshow = () => {
-    pauseSlideshow();
-    if (!document.hidden && !reducedMotion.matches) {
+  const scheduleNextPhoto = () => {
+    window.clearTimeout(timer);
+    if (!userPaused && !document.hidden && !reducedMotion.matches && photos.length > 1) {
       timer = window.setTimeout(showNextPhoto, 5200);
     }
   };
 
-  document.addEventListener('visibilitychange', resumeSlideshow);
-  reducedMotion.addEventListener('change', resumeSlideshow);
-  resumeSlideshow();
+  pauseButton.addEventListener('click', () => {
+    userPaused = !userPaused;
+    updatePauseControl();
+    scheduleNextPhoto();
+  });
+  document.addEventListener('visibilitychange', scheduleNextPhoto);
+  reducedMotion.addEventListener('change', () => {
+    updatePauseControl();
+    scheduleNextPhoto();
+  });
+  updatePauseControl();
+  scheduleNextPhoto();
 }

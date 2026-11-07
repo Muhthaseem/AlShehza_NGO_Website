@@ -7,6 +7,7 @@ export const siteConfig = {
     primaryLight: '#2C5D68',
     primaryMedium: '#527780',
     accent: '#CD4E3C',
+    accentText: '#AD4030',
     accentLight: '#DC9C47',
     accentDark: '#C45A3E',
     warmIvory: '#F7F5EB',

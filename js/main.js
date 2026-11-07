@@ -162,7 +162,7 @@ export function renderFooter() {
 
 export function initializeSite(page) {
   document.documentElement.lang = siteConfig.language;
-  const { headingFont, bodyFont, primary, primaryLight, primaryMedium, accent, accentLight, accentDark, warmIvory } = siteConfig.theme;
+  const { headingFont, bodyFont, primary, primaryLight, primaryMedium, accent, accentText, accentLight, accentDark, warmIvory } = siteConfig.theme;
   const rootStyle = document.documentElement.style;
   rootStyle.setProperty('--font-heading', headingFont);
   rootStyle.setProperty('--font-body', bodyFont);
@@ -170,11 +170,14 @@ export function initializeSite(page) {
   rootStyle.setProperty('--clr-primary-light', primaryLight);
   rootStyle.setProperty('--clr-primary-medium', primaryMedium);
   rootStyle.setProperty('--clr-gold', accent);
-  rootStyle.setProperty('--clr-gold-light', accentLight);
-  rootStyle.setProperty('--clr-gold-dark', accentDark);
+  rootStyle.setProperty('--clr-accent-red', accent);
+  rootStyle.setProperty('--clr-accent-strong', accentText);
+  rootStyle.setProperty('--clr-brand-gold', accentLight);
+  rootStyle.setProperty('--clr-gold-dark', accentText);
+  rootStyle.setProperty('--clr-burnt-orange', accentDark);
   rootStyle.setProperty('--clr-off-white', warmIvory);
   rootStyle.setProperty('--grad-gold', `linear-gradient(135deg, ${accent} 0%, ${accentLight} 100%)`);
-  rootStyle.setProperty('--grad-gold-text', `linear-gradient(135deg, ${accent}, ${accentLight})`);
+  rootStyle.setProperty('--grad-gold-text', `linear-gradient(135deg, ${accentText}, ${primary})`);
 
   const navbar = document.getElementById('navbar-container');
   const footer = document.getElementById('footer-container');
