@@ -1,0 +1,46 @@
+# -----------------------------------------
+# Node / npm
+# -----------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# -----------------------------------------
+# Vite build output
+# (keep 'dist/' out of main branch;
+#  it will live on the gh-pages branch only)
+# -----------------------------------------
+dist/
+.vite/
+
+# -----------------------------------------
+# Environment variables & secrets
+# -----------------------------------------
+.env
+.env.*
+!.env.example
+
+# -----------------------------------------
+# OS / editor clutter
+# -----------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.suo
+*.user
+
+# -----------------------------------------
+# IDE settings (optional – remove lines
+# for IDEs your team shares configs for)
+# -----------------------------------------
+.vscode/settings.json
+.idea/
+*.iml
+
+# -----------------------------------------
+# Logs & temp files
+# -----------------------------------------
+*.log
+*.tmp
+*.temp
