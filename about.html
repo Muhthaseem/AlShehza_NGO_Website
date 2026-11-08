@@ -13,9 +13,9 @@
     <div id="navbar-container"></div>
     <main class="story-fieldnotes">
         <section class="fieldnotes-cover">
-            <figure class="fieldnotes-cover__photo">
-                <img src="/assets/images/community_water_well_donation/12.jpeg" alt="A community water point built for everyday use">
-                <figcaption>Care that reaches into everyday life</figcaption>
+            <figure class="fieldnotes-cover__photo" id="storyProjectSlideshow" aria-label="Photos of the foundation's projects">
+                <img class="fieldnotes-cover__slide is-active" src="/assets/images/community_water_well_donation/12.jpeg" alt="Community well project" fetchpriority="high" decoding="async">
+                <figcaption class="fieldnotes-cover__photo-caption">Community water · Community well project</figcaption>
             </figure>
             <div class="fieldnotes-cover__panel">
                 <div class="fieldnotes-cover__meta"><span>AL SHEHZA FOUNDATION</span><span>FIELD NOTES · NO. 01</span></div>
@@ -90,7 +90,9 @@
     <div id="footer-container"></div>
     <script type="module">
         import { initializeSite } from './js/main.js';
+        import { initializeStoryProjectSlideshow } from './js/content-pages.js';
         initializeSite('about.html');
+        initializeStoryProjectSlideshow();
     </script>
 </body>
 </html>

@@ -9,6 +9,9 @@ describe('site content configuration', () => {
   it('presents the foundation story and its core initiatives', () => {
     const aboutPage = readFileSync(join(process.cwd(), 'about.html'), 'utf8');
     expect(aboutPage).toContain('fieldnotes-cover');
+    expect(aboutPage).toContain('id="storyProjectSlideshow"');
+    expect(aboutPage).not.toContain('data-story-slide=');
+    expect(aboutPage).toContain('initializeStoryProjectSlideshow');
     expect(aboutPage).toContain('fieldnotes-origin');
     expect(aboutPage).toContain('fieldnotes-work__entries');
     expect(aboutPage).toContain('fieldnotes-values__list');
@@ -25,6 +28,11 @@ describe('site content configuration', () => {
     expect(aboutPage).toContain('FAITH & LEARNING');
     expect(aboutPage).toContain('donors whose generosity');
     expect(aboutPage).toContain('/assets/images/community_water_well_donation/12.jpeg');
+    const contentPages = readFileSync(join(process.cwd(), 'js', 'content-pages.js'), 'utf8');
+    expect(contentPages).toContain('export function initializeStoryProjectSlideshow()');
+    expect(contentPages).toContain('project.images.map((src, index)');
+    expect(contentPages).toContain('setTimeout(() => showSlide(slideIndex + 1), 3000)');
+    expect(contentPages).toContain('reducedMotion.addEventListener(\'change\', scheduleAdvance)');
   });
 
   it('provides a destination for every primary navigation item', () => {
@@ -111,6 +119,7 @@ describe('site content configuration', () => {
     expect(projectsScript).toContain('setTimeout(() => showImage(1), 4800)');
     expect(projectsScript).toMatch(/updateIndicators\(\);\s+scheduleAdvance\(\);/);
     expect(projectsScript).toContain('work-carousel__track');
+    expect(projectsScript).toMatch(/firstImage\.classList\.add\('is-active'\);\s*firstImage\.src = project\.images\[0\];/);
     expect(projectsScript).toContain('dataset.direction');
     expect(projectsScript).not.toContain('is-changing');
     const styles = readFileSync(join(process.cwd(), 'css', 'style.css'), 'utf8');

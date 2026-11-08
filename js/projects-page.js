@@ -29,6 +29,7 @@ function createCarousel(project) {
   });
   let activeImageLayer = 0;
   const firstImage = imageLayers[activeImageLayer];
+  firstImage.classList.add('is-active');
   firstImage.src = project.images[0];
   firstImage.alt = `${project.title} — photo 1 of ${project.images.length}`;
   firstImage.loading = project.order <= 2 ? 'eager' : 'lazy';
