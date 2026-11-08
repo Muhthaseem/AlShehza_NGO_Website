@@ -33,25 +33,12 @@ function createCarousel(project) {
   firstImage.src = project.images[0];
   firstImage.alt = `${project.title} — photo 1 of ${project.images.length}`;
   firstImage.loading = project.order <= 2 ? 'eager' : 'lazy';
-  const caption = document.createElement('figcaption');
-  caption.className = 'work-carousel__count';
-  caption.textContent = `01 / ${String(project.images.length).padStart(2, '0')}`;
-  figure.append(imageTrack, caption);
+  figure.append(imageTrack);
 
   const controls = document.createElement('div');
   controls.className = 'work-carousel__controls';
   controls.setAttribute('role', 'group');
   controls.setAttribute('aria-label', `${project.title} photo controls`);
-  const previous = document.createElement('button');
-  previous.type = 'button';
-  previous.className = 'work-carousel__arrow';
-  previous.setAttribute('aria-label', `Previous ${project.title} photo`);
-  previous.textContent = '←';
-  const next = document.createElement('button');
-  next.type = 'button';
-  next.className = 'work-carousel__arrow';
-  next.setAttribute('aria-label', `Next ${project.title} photo`);
-  next.textContent = '→';
   const indicators = document.createElement('div');
   indicators.className = 'work-carousel__indicators';
   indicators.setAttribute('role', 'group');
@@ -65,13 +52,12 @@ function createCarousel(project) {
     indicators.append(dot);
     return dot;
   });
-  controls.append(previous, indicators, next);
+  controls.append(indicators);
   visual.append(figure, controls);
 
   let imageIndex = 0;
   let autoAdvance;
   let isVisible = false;
-  let motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const updateIndicators = () => {
     dots.forEach((dot, index) => {
       if (index === imageIndex) {
@@ -82,12 +68,11 @@ function createCarousel(project) {
         dot.removeAttribute('aria-current');
       }
     });
-    caption.textContent = `${String(imageIndex + 1).padStart(2, '0')} / ${String(project.images.length).padStart(2, '0')}`;
   };
   const scheduleAdvance = () => {
     window.clearTimeout(autoAdvance);
-    if (isVisible && motionAllowed && project.images.length > 1 && !document.hidden) {
-      autoAdvance = window.setTimeout(() => showImage(1), 4800);
+    if (isVisible && project.images.length > 1 && !document.hidden) {
+      autoAdvance = window.setTimeout(() => showImage(1), 3000);
     }
   };
   const showImageAt = (index, direction = 1) => {
@@ -128,19 +113,28 @@ function createCarousel(project) {
     showImageAt(imageIndex + direction, direction);
   };
   updateIndicators();
-  previous.addEventListener('click', () => showImage(-1));
-  next.addEventListener('click', () => showImage(1));
   figure.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft') showImageAt(imageIndex - 1, -1);
     if (event.key === 'ArrowRight') showImageAt(imageIndex + 1, 1);
   });
   figure.tabIndex = 0;
   figure.setAttribute('aria-label', `${project.title} photo carousel. Use left and right arrow keys to browse.`);
-  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  reducedMotionQuery.addEventListener('change', event => {
-    motionAllowed = !event.matches;
-    scheduleAdvance();
+  let pointerStart = null;
+  figure.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'touch' || event.pointerType === 'pen') {
+      pointerStart = { x: event.clientX, y: event.clientY };
+    }
   });
+  figure.addEventListener('pointerup', event => {
+    if (!pointerStart) return;
+    const deltaX = event.clientX - pointerStart.x;
+    const deltaY = event.clientY - pointerStart.y;
+    pointerStart = null;
+    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      showImage(deltaX < 0 ? 1 : -1);
+    }
+  });
+  figure.addEventListener('pointercancel', () => { pointerStart = null; });
   document.addEventListener('visibilitychange', scheduleAdvance);
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(([entry]) => {

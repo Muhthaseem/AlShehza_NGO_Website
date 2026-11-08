@@ -5244,6 +5244,40 @@ main .home-hero__copy > p:not(.eyebrow):not(.work-card__eyebrow):not(.work-card_
 .work-carousel__count { font-size: 12px; letter-spacing: 0.08em; }
 .work-note__inner > p { font-size: 12px; letter-spacing: 0.08em; }
 .leader-card__contacts a { font-size: 15px; }
+
+/* Quiet, swipe-first controls for project photo carousels. */
+.work-carousel__figure { touch-action: pan-y; }
+.work-carousel__controls {
+  right: 0;
+  bottom: 12px;
+  left: 0;
+  justify-content: center;
+  pointer-events: none;
+}
+.work-carousel__indicators {
+  max-width: calc(100% - 24px);
+  flex-wrap: nowrap;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 0;
+  background: rgba(30, 45, 48, 0.18);
+  backdrop-filter: blur(5px);
+  pointer-events: auto;
+}
+.work-carousel__dot,
+.work-carousel__dot.is-active {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  background: rgba(247, 245, 235, 0.48);
+  opacity: 0.72;
+}
+.work-carousel__dot.is-active {
+  background: rgba(247, 245, 235, 0.9);
+  opacity: 1;
+}
+.work-carousel__dot:hover { transform: scale(1.15); }
+.work-carousel__dot:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
 .leader-card__contacts a span { font-size: 11px; letter-spacing: 0.08em; }
 .leader-card__note { font-size: 11px; letter-spacing: 0.07em; }
 .leader-card__content > p:not(.eyebrow):not(.work-card__eyebrow):not(.work-card__summary) { font-size: 16px; }
