@@ -111,7 +111,8 @@ describe('site content configuration', () => {
     const projectsScript = readFileSync(join(process.cwd(), 'js', 'projects-page.js'), 'utf8');
     expect(projectsPage).toContain('work-hero__collage');
     expect(projectsPage).not.toContain('page-intro__inner');
-    expect(contactPage).toContain('contact-hero__email');
+    expect(contactPage).toContain('contact-options__grid');
+    expect(contactPage).toContain('mailto:alshehzafoundation@gmail.com');
     expect(contactPage).not.toContain('page-intro__inner');
     expect(projectsPage).not.toContain('projectModal');
     expect(projectsScript).toContain('work-carousel__arrow');

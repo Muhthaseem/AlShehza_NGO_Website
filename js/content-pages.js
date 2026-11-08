@@ -39,9 +39,45 @@ function renderProgramPillars() {
   }));
 }
 
+function renderFeaturedWork() {
+  const container = document.getElementById('homepageFeaturedWork');
+  if (!container) return;
+
+  const featured = Object.values(projects)
+    .filter(project => project.images.length)
+    .sort((left, right) => left.order - right.order)
+    .slice(0, 3);
+
+  container.replaceChildren(...featured.map(project => {
+    const link = document.createElement('a');
+    link.className = 'home-feature-card';
+    link.href = `projects.html#project-${project.order}`;
+    const image = document.createElement('img');
+    image.src = project.images[0];
+    image.alt = `${project.title} project`;
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    const visual = document.createElement('div');
+    visual.className = 'home-feature-card__visual';
+    visual.append(image);
+    const copy = document.createElement('div');
+    copy.className = 'home-feature-card__copy';
+    const category = createTextElement('p', 'home-feature-card__category', project.category);
+    const title = createTextElement('h3', '', project.title);
+    const arrow = document.createElement('span');
+    arrow.className = 'home-feature-card__arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '↗';
+    copy.append(category, title, arrow);
+    link.append(visual, copy);
+    return link;
+  }));
+}
+
 export function renderHomeContent() {
   renderStats();
   renderProgramPillars();
+  renderFeaturedWork();
 }
 
 export function initializeStoryProjectSlideshow() {
