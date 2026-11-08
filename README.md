@@ -134,7 +134,7 @@ Project detail copy in `js/projects-data.js` supports reviewed HTML in its secti
 
 ### GitHub Pages
 
-The repository includes `.github/workflows/pages.yml`. It builds the four HTML pages and deploys `dist/` whenever a commit reaches `main`. GitHub supplies the correct base path during the build, so the project site works under `/AlShehza_NGO_Website/` and switches to the domain root when a custom domain is configured.
+The repository includes `.github/workflows/pages.yml`. It builds the four HTML pages and deploys `dist/` whenever a commit reaches `main`. It defaults to the repository project path (`/AlShehza_NGO_Website/`) and checks that generated HTML points to assets under that path before deployment.
 
 To enable deployment:
 
@@ -143,7 +143,7 @@ To enable deployment:
 3. Set **Build and deployment → Source** to **GitHub Actions**.
 4. Open the **Actions** tab and check the **Deploy website to GitHub Pages** workflow. The deployed URL will appear in the workflow run and on the Pages settings page.
 
-The workflow uses GitHub's Pages artifact deployment. Do not select a branch-based `gh-pages` source alongside it.
+The workflow uses GitHub's Pages artifact deployment. Do not select a branch-based `gh-pages` source alongside it. For a different repository name, the project path is derived from that name.
 
 For a local production preview of the current GitHub project URL, set the base path before building:
 
@@ -153,11 +153,11 @@ npm run build
 npm run preview
 ```
 
-For a domain-root host, build with `VITE_BASE_PATH=/`.
+For a domain-root host, build with `VITE_BASE_PATH=/`. When configuring a custom domain on GitHub Pages, add a repository Actions variable named `VITE_BASE_PATH` with the value `/` under **Settings → Secrets and variables → Actions → Variables**. Remove that variable if you later return to the `github.io` project URL.
 
 ### Connecting a Namecheap domain later
 
-After purchasing the domain, first add it under **Settings → Pages → Custom domain** in GitHub and wait for GitHub to verify it. Then configure the DNS records at Namecheap using the values GitHub documents for the chosen apex or `www` hostname, enable **Enforce HTTPS** once available, and wait for DNS propagation. GitHub Actions does not require a committed `CNAME` file. The Pages workflow reads GitHub's configured base path automatically, so the assets will build at `/` for a custom domain. See GitHub's [custom-domain guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site) for the current DNS values and verification steps.
+After purchasing the domain, first add it under **Settings → Pages → Custom domain** in GitHub and wait for GitHub to verify it. Set the `VITE_BASE_PATH` Actions variable to `/`, then configure the DNS records at Namecheap using the values GitHub documents for the chosen apex or `www` hostname, enable **Enforce HTTPS** once available, and wait for DNS propagation. GitHub Actions does not require a committed `CNAME` file. See GitHub's [custom-domain guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site) for the current DNS values and verification steps.
 
 ## Public-repository and privacy notes
 
