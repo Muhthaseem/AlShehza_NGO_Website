@@ -7,31 +7,42 @@
     <link rel="icon" type="image/png" href="/assets/images/brand/al-shehza-circle-dark.png">
     <title>Al Shehza Foundation</title>
     <meta name="description" content="Al Shehza Foundation works to alleviate poverty and restore dignity through community support, clean water, and seasonal relief.">
+    <script>try { document.documentElement.dataset.theme = localStorage.getItem('al-shehza-theme') === 'light' ? 'light' : 'dark'; } catch { document.documentElement.dataset.theme = 'dark'; }</script>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <div id="navbar-container"></div>
     <main>
         <section class="home-hero">
-            <div class="home-hero__slideshow" id="homeProjectSlideshow" aria-hidden="true"></div>
+            <div class="home-hero__ambience" aria-hidden="true">
+                <span class="home-hero__ripple home-hero__ripple--one"></span>
+                <span class="home-hero__ripple home-hero__ripple--two"></span>
+                <i class="home-hero__spark home-hero__spark--one"></i>
+                <i class="home-hero__spark home-hero__spark--two"></i>
+                <i class="home-hero__spark home-hero__spark--three"></i>
+                <i class="home-hero__spark home-hero__spark--four"></i>
+                <i class="home-hero__spark home-hero__spark--five"></i>
+            </div>
             <div class="home-hero__inner page-wrap">
                 <div class="home-hero__copy">
-                    <p class="eyebrow"><span class="eyebrow__dot"></span> A community foundation · Established 2021</p>
-                    <h1>Care that reaches people.<br><em>Dignity that stays.</em></h1>
-                    <p class="home-hero__lead">We stand alongside people facing hardship with compassionate support, access to clean water, and help when it matters most.</p>
+                    <img class="home-hero__brand-logo" src="/assets/images/brand/al-shehza-primary-dark.png" data-theme-logo-light="assets/images/brand/al-shehza-primary-dark.png" data-theme-logo-dark="assets/images/brand/al-shehza-primary-light.png" alt="Al Shehza Foundation">
+                    <p class="eyebrow"><span class="eyebrow__dot"></span> Community foundation · Established 2021</p>
+                    <h1>Care that meets people <em>where they are.</em></h1>
+                    <p class="home-hero__lead">We stand alongside people and families facing hardship with practical support, access to clean water, and care that respects every person’s dignity.</p>
                     <div class="button-row">
-                        <a class="button button--primary" href="projects.html">Discover our work <span aria-hidden="true">↗</span></a>
+                        <a class="button button--primary" href="projects.html">Explore our work <span aria-hidden="true">↗</span></a>
                         <a class="text-link" href="about.html">Our story <span aria-hidden="true">→</span></a>
                     </div>
-                    <div class="hero-note"><span class="hero-note__line"></span><span>Compassion in action. Dignity for all.</span></div>
                 </div>
-                <div class="home-hero__art" aria-hidden="true">
-                    <span class="home-hero__logo-orbit home-hero__logo-orbit--one"></span>
-                    <span class="home-hero__logo-orbit home-hero__logo-orbit--two"></span>
-                    <img class="home-hero__logo" src="/assets/images/brand/al-shehza-primary-dark.png" alt="">
+                <div class="home-hero__art">
+                    <div class="home-hero__slideshow" id="homeProjectSlideshow" aria-hidden="true"></div>
+                    <div class="home-hero__image-shade" aria-hidden="true"></div>
+                    <div class="home-hero__photo-label">
+                        <span><small>Care in action</small><strong>Rooted in community</strong></span>
+                    </div>
+                    <span class="home-hero__since">Serving since 2021</span>
                 </div>
             </div>
-            <div class="hero-bottom page-wrap"><span>Rooted in community</span><span class="hero-bottom__rule"></span><span>Working for a more dignified tomorrow</span></div>
         </section>
 
         <section class="stat-strip" aria-label="Foundation at a glance"><div class="page-wrap stat-strip__inner" id="homepageStats"></div></section>
@@ -72,7 +83,7 @@
         <section class="home-cta">
             <div class="page-wrap home-cta__inner">
                 <div><p class="eyebrow">The work continues</p><h2>A more dignified future is built <em>together.</em></h2></div>
-                <a class="button button--light" href="contact.html">Meet our leadership <span aria-hidden="true">↗</span></a>
+                <a class="button button--light" href="contact.html">Contact the foundation <span aria-hidden="true">↗</span></a>
             </div>
         </section>
     </main>

@@ -52,8 +52,9 @@ function createCarousel(project) {
     indicators.append(dot);
     return dot;
   });
-  controls.append(indicators);
-  visual.append(figure, controls);
+  if (project.images.length > 1) controls.append(indicators);
+  visual.append(figure);
+  if (project.images.length > 1) visual.append(controls);
 
   let imageIndex = 0;
   let autoAdvance;
@@ -178,7 +179,12 @@ function createWorkCard(project) {
     details.append(detail);
   });
 
-  content.append(eyebrow, title, summary, details);
+  const more = document.createElement('details');
+  more.className = 'work-card__more';
+  const moreLabel = document.createElement('summary');
+  moreLabel.textContent = 'More about this initiative';
+  more.append(moreLabel, details);
+  content.append(eyebrow, title, summary, more);
   card.append(visual, content);
   return card;
 }
@@ -194,4 +200,42 @@ export function renderFeaturedProjects() {
 export function initializeProjectsPage() {
   if (!document.getElementById('projectGrid')) return;
   renderFeaturedProjects();
+  initializeProjectFilters();
+}
+
+function initializeProjectFilters() {
+  const filters = document.getElementById('projectFilters');
+  const grid = document.getElementById('projectGrid');
+  const status = document.getElementById('projectFilterStatus');
+  if (!filters || !grid) return;
+
+  const groups = [
+    { label: 'All initiatives', matches: () => true },
+    { label: 'Water', matches: category => /water|well/i.test(category) },
+    { label: 'Food & nourishment', matches: category => /food|iftar|relief|nourishment|nutrition/i.test(category) },
+    { label: 'Faith & learning', matches: category => /faith|quran|qurban/i.test(category) },
+  ];
+  const cards = [...grid.querySelectorAll('.work-card')];
+
+  groups.forEach((group, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'work-filter';
+    button.textContent = group.label;
+    button.setAttribute('aria-pressed', String(index === 0));
+    button.addEventListener('click', () => {
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const category = `${card.querySelector('.work-card__eyebrow')?.textContent || ''} ${card.querySelector('h3')?.textContent || ''}`;
+        const visible = group.matches(category);
+        card.hidden = !visible;
+        if (visible) visibleCount += 1;
+      });
+      filters.querySelectorAll('.work-filter').forEach(filter => {
+        filter.setAttribute('aria-pressed', String(filter === button));
+      });
+      if (status) status.textContent = `${visibleCount} ${visibleCount === 1 ? 'initiative' : 'initiatives'} shown`;
+    });
+    filters.append(button);
+  });
 }

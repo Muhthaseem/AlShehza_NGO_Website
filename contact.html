@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="/assets/images/brand/al-shehza-circle-dark.png">
     <title>Contact | Al Shehza Foundation</title>
     <meta name="description" content="Contact Al Shehza Foundation or reach its Founder and President directly.">
+    <script>try { document.documentElement.dataset.theme = localStorage.getItem('al-shehza-theme') === 'light' ? 'light' : 'dark'; } catch { document.documentElement.dataset.theme = 'dark'; }</script>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -21,7 +22,7 @@
                     <a class="contact-intro__action" href="mailto:alshehzafoundation@gmail.com">Email the foundation <span aria-hidden="true">↗</span></a>
                 </div>
                 <div class="contact-intro__brand" aria-hidden="true">
-                    <img src="/assets/images/brand/al-shehza-primary-dark.png" alt="">
+                    <img src="/assets/images/brand/al-shehza-primary-dark.png" data-theme-logo-light="assets/images/brand/al-shehza-primary-dark.png" data-theme-logo-dark="assets/images/brand/al-shehza-primary-light.png" alt="">
                     <span>Compassion in action.<br>Dignity for all.</span>
                 </div>
             </div>
@@ -40,31 +41,18 @@
                         <span class="contact-option__value">alshehzafoundation@gmail.com</span>
                         <span class="contact-option__arrow" aria-hidden="true">↗</span>
                     </a>
-                    <a class="contact-option" href="tel:+94771415023">
-                        <span class="contact-option__label">Founder &amp; President</span>
-                        <strong>Phone</strong>
-                        <span class="contact-option__value">+94 77 141 5023</span>
-                        <span class="contact-option__arrow" aria-hidden="true">↗</span>
-                    </a>
-                    <a class="contact-option" href="mailto:sawahirrismir3@gmail.com">
-                        <span class="contact-option__label">Founder &amp; President</span>
-                        <strong>Email</strong>
-                        <span class="contact-option__value">sawahirrismir3@gmail.com</span>
-                        <span class="contact-option__arrow" aria-hidden="true">↗</span>
-                    </a>
                 </div>
-            </div>
-        </section>
-
-        <section class="contact-leadership">
-            <div class="page-wrap contact-leadership__inner">
-                <span class="contact-leadership__index" aria-hidden="true">01</span>
-                <div>
-                    <p class="eyebrow">Our leadership</p>
-                    <h2>S. Rismir</h2>
-                    <p>Founder and President of Al Shehza Foundation, leading its work to support communities with compassion and dignity.</p>
-                </div>
-                <span class="contact-leadership__role">Founder &amp; President</span>
+                <article class="contact-founder">
+                    <div class="contact-founder__intro">
+                        <p class="contact-option__label">Founder &amp; President</p>
+                        <h3>S. Rismir</h3>
+                        <p>For direct enquiries, reach the foundation’s Founder and President by phone or email.</p>
+                    </div>
+                    <div class="contact-founder__links">
+                        <a href="tel:+94771415023"><span>Phone</span><strong>+94 77 141 5023</strong></a>
+                        <a href="mailto:sawahirrismir3@gmail.com"><span>Email</span><strong>sawahirrismir3@gmail.com</strong></a>
+                    </div>
+                </article>
             </div>
         </section>
     </main>

@@ -8,6 +8,25 @@ function createTextElement(tagName, className, text) {
   return element;
 }
 
+function createProgramIcon(type) {
+  const namespace = 'http://www.w3.org/2000/svg';
+  const paths = {
+    water: ['M12 2.5C9.2 6.4 5.5 10.3 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 10.3 14.8 6.4 12 2.5Z', 'M8.5 15.5a3.2 3.2 0 0 0 3.2 3.2'],
+    'hand-holding-heart': ['M12 20.2s-7-4.3-7-9.1a4.1 4.1 0 0 1 7-2.9 4.1 4.1 0 0 1 7 2.9c0 4.8-7 9.1-7 9.1Z', 'M3 18.5h3.2l2.1 1.2h5.1a2 2 0 0 0 2-2v-.1h-4.1'],
+    charity: ['M4 5.5h4.5A3.5 3.5 0 0 1 12 9v10a3.5 3.5 0 0 0-3.5-3.5H4z', 'M20 5.5h-4.5A3.5 3.5 0 0 0 12 9v10a3.5 3.5 0 0 1 3.5-3.5H20z'],
+  };
+  const svg = document.createElementNS(namespace, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  (paths[type] || paths.charity).forEach(d => {
+    const path = document.createElementNS(namespace, 'path');
+    path.setAttribute('d', d);
+    svg.append(path);
+  });
+  return svg;
+}
+
 function renderStats() {
   const container = document.getElementById('homepageStats');
   if (!container) return;
@@ -28,12 +47,24 @@ function renderProgramPillars() {
   if (!container) return;
 
   container.replaceChildren(...siteConfig.pages.home.programPillars.map(area => {
-    const card = document.createElement('article');
+    const card = document.createElement('a');
     card.className = 'pillar-card';
+    card.href = area.href;
+    const icon = document.createElement('span');
+    icon.className = `pillar-card__icon pillar-card__icon--${area.icon}`;
+    icon.setAttribute('aria-hidden', 'true');
+    icon.append(createProgramIcon(area.icon));
+    const heading = createTextElement('h3', 'pillar-card__title', area.title);
+    heading.id = `program-title-${area.number}`;
+    const action = createTextElement('span', 'pillar-card__link', 'Explore initiatives');
+    action.id = `program-action-${area.number}`;
+    card.setAttribute('aria-labelledby', `${heading.id} ${action.id}`);
     card.append(
       createTextElement('span', 'pillar-card__number', area.number),
-      createTextElement('h3', 'pillar-card__title', area.title),
+      icon,
+      heading,
       createTextElement('p', 'pillar-card__text', area.description),
+      action,
     );
     return card;
   }));

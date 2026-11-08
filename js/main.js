@@ -56,6 +56,33 @@ function initNavbar() {
   }
 }
 
+function initThemeToggle() {
+  const button = document.querySelector('.theme-toggle');
+  if (!button) return;
+
+  const applyTheme = theme => {
+    document.documentElement.dataset.theme = theme;
+    const dark = theme === 'dark';
+    button.setAttribute('aria-pressed', String(dark));
+    button.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`);
+    button.title = `Switch to ${dark ? 'light' : 'dark'} theme`;
+    document.querySelectorAll('[data-theme-logo-light][data-theme-logo-dark]').forEach(image => {
+      image.src = dark ? image.dataset.themeLogoDark : image.dataset.themeLogoLight;
+    });
+  };
+
+  applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+  button.addEventListener('click', () => {
+    const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme);
+    try {
+      localStorage.setItem('al-shehza-theme', nextTheme);
+    } catch {
+      // The theme still works for this page when storage is unavailable.
+    }
+  });
+}
+
 function initScrollReveal() {
   const revealTargets = [
     '.home-hero__copy',
@@ -112,6 +139,7 @@ function initScrollReveal() {
 }
 
 export function renderNavbar(activePage) {
+  const logo = `${import.meta.env.BASE_URL}assets/images/brand/al-shehza-circle-dark.png`;
   const links = siteConfig.navigation.map(page =>
     `<a class="site-nav__link${page.href === activePage ? ' is-active' : ''}" href="${page.href}">${page.name}</a>`
   ).join('');
@@ -121,10 +149,14 @@ export function renderNavbar(activePage) {
       <div class="scroll-progress" aria-hidden="true"><span class="scroll-progress__fill"></span></div>
       <div class="site-header__inner">
         <a class="site-brand" href="index.html" aria-label="${siteConfig.organization.name} home">
-          <img class="site-brand__logo" src="${import.meta.env.BASE_URL}assets/images/brand/al-shehza-circle-dark.png" alt="">
+          <img class="site-brand__logo" src="${logo}" alt="">
           <span class="site-brand__name">${siteConfig.organization.name}<small>Care • Dignity • Hope</small></span>
         </a>
         <nav class="site-nav" aria-label="Main navigation">${links}</nav>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Switch to dark theme">
+          <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>
+          <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 15.2A8.8 8.8 0 0 1 8.8 3.5 8.8 8.8 0 1 0 20.5 15.2Z"></path></svg>
+        </button>
         <button class="site-menu-button" type="button" aria-expanded="false" aria-controls="siteMobileMenu" aria-label="Toggle navigation">
           <span></span><span></span>
         </button>
@@ -179,6 +211,7 @@ export function initializeSite(page) {
   const navbar = document.getElementById('navbar-container');
   const footer = document.getElementById('footer-container');
   if (navbar) navbar.innerHTML = renderNavbar(page);
+  initThemeToggle();
   if (footer) footer.innerHTML = renderFooter();
 
   const pageKey = page === 'index.html' ? 'home' : page.replace(/\.html$/, '');

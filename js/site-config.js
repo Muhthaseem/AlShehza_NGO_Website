@@ -3,14 +3,14 @@ export const siteConfig = {
   theme: {
     headingFont: "'Lora', Georgia, serif",
     bodyFont: "'DM Sans', sans-serif",
-    primary: '#1A4250',
+    primary: '#1E4653',
     primaryLight: '#2C5D6A',
     primaryMedium: '#3D7585',
     accent: '#B85C3E',
     accentText: '#8E3D27',
     accentLight: '#D8864E',
     accentDark: '#C45A3E',
-    warmIvory: '#F5F3E8',
+    warmIvory: '#F7F5EB',
   },
   organization: {
     name: 'Al Shehza Foundation',
@@ -40,8 +40,8 @@ export const siteConfig = {
       },
       stats: [
         { value: '2021', label: 'Established' },
-        { value: 'People first', label: 'Our approach' },
-        { value: 'Lasting care', label: 'Our commitment' },
+        { value: 'Dignity', label: 'Our approach' },
+        { value: 'Practical care', label: 'Our commitment' },
       ],
       introduction: {
         eyebrow: 'Why we are here',
@@ -52,9 +52,9 @@ export const siteConfig = {
         ],
       },
       programPillars: [
-        { icon: 'water', number: '01', title: 'Water for daily life', description: 'Community wells and household tube wells bring essential water closer to home.' },
-        { icon: 'hand-holding-heart', number: '02', title: 'Food and nourishment', description: 'Rice, iftar meals, and yoghurt offer practical support to people and children in need.' },
-        { icon: 'charity', number: '03', title: 'Faith and learning', description: 'Qurban and Quran donations share care, learning, and the spirit of giving.' },
+        { icon: 'water', number: '01', title: 'Water for daily life', description: 'Community wells and household tube wells bring essential water closer to home.', href: 'projects.html#project-1' },
+        { icon: 'hand-holding-heart', number: '02', title: 'Food and nourishment', description: 'Rice, iftar meals, and yoghurt offer practical support to people and children in need.', href: 'projects.html#project-3' },
+        { icon: 'charity', number: '03', title: 'Faith and learning', description: 'Qurban and Quran donations share care, learning, and the spirit of giving.', href: 'projects.html#project-6' },
       ],
       projects: {
         title: 'Care in action',
