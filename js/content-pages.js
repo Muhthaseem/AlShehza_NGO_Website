@@ -39,9 +39,137 @@ function renderProgramPillars() {
   }));
 }
 
+function renderFeaturedWork() {
+  const container = document.getElementById('homepageFeaturedWork');
+  if (!container) return;
+
+  const featured = Object.values(projects)
+    .filter(project => project.images.length)
+    .sort((left, right) => left.order - right.order)
+    .slice(0, 3);
+
+  container.replaceChildren(...featured.map(project => {
+    const link = document.createElement('a');
+    link.className = 'home-feature-card';
+    link.href = `projects.html#project-${project.order}`;
+    const image = document.createElement('img');
+    image.src = project.images[0];
+    image.alt = `${project.title} project`;
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    const visual = document.createElement('div');
+    visual.className = 'home-feature-card__visual';
+    visual.append(image);
+    const copy = document.createElement('div');
+    copy.className = 'home-feature-card__copy';
+    const category = createTextElement('p', 'home-feature-card__category', project.category);
+    const title = createTextElement('h3', '', project.title);
+    const arrow = document.createElement('span');
+    arrow.className = 'home-feature-card__arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '↗';
+    copy.append(category, title, arrow);
+    link.append(visual, copy);
+    return link;
+  }));
+}
+
 export function renderHomeContent() {
   renderStats();
   renderProgramPillars();
+  renderFeaturedWork();
+}
+
+export function initializeStoryProjectSlideshow() {
+  const slideshow = document.getElementById('storyProjectSlideshow');
+  if (!slideshow) return;
+
+  const slides = Object.values(projects).flatMap(project =>
+    project.images.map((src, index) => ({
+      src,
+      alt: `${project.title} — project photo ${index + 1} of ${project.images.length}`,
+      caption: `${project.category} · ${project.title}`,
+    }))
+  );
+  if (!slides.length) {
+    throw new Error('The story project slideshow requires at least one project photo.');
+  }
+
+  const caption = slideshow.querySelector('.fieldnotes-cover__photo-caption');
+  const firstLayer = slideshow.querySelector('.fieldnotes-cover__slide');
+  if (!caption || !firstLayer) {
+    throw new Error('The story project slideshow is missing required markup.');
+  }
+
+  const secondLayer = document.createElement('img');
+  secondLayer.className = 'fieldnotes-cover__slide';
+  secondLayer.alt = '';
+  secondLayer.setAttribute('aria-hidden', 'true');
+  secondLayer.decoding = 'async';
+  slideshow.insertBefore(secondLayer, caption);
+
+  const layers = [firstLayer, secondLayer];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let activeLayer = 0;
+  let slideIndex = 0;
+  let isVisible = false;
+  let timer;
+
+  const scheduleAdvance = () => {
+    window.clearTimeout(timer);
+    if (isVisible && !document.hidden && !reducedMotion.matches && slides.length > 1) {
+      timer = window.setTimeout(() => showSlide(slideIndex + 1), 3000);
+    }
+  };
+
+  const showSlide = nextIndex => {
+    const nextLayer = 1 - activeLayer;
+    const incomingImage = layers[nextLayer];
+    const requestedSlide = slides[nextIndex % slides.length];
+    incomingImage.onload = () => {
+      incomingImage.onload = null;
+      incomingImage.onerror = null;
+      slideIndex = nextIndex % slides.length;
+      incomingImage.alt = requestedSlide.alt;
+      incomingImage.removeAttribute('aria-hidden');
+      incomingImage.classList.add('is-active');
+      layers[activeLayer].classList.remove('is-active', 'is-entering');
+      layers[activeLayer].alt = '';
+      layers[activeLayer].setAttribute('aria-hidden', 'true');
+      activeLayer = nextLayer;
+      caption.textContent = requestedSlide.caption;
+      scheduleAdvance();
+    };
+    incomingImage.onerror = () => {
+      incomingImage.onload = null;
+      incomingImage.onerror = null;
+      console.error(`Unable to load story project photo: ${requestedSlide.src}`);
+      timer = window.setTimeout(() => showSlide((nextIndex + 1) % slides.length), 3000);
+    };
+    incomingImage.src = requestedSlide.src;
+  };
+
+  firstLayer.alt = slides[0].alt;
+  firstLayer.loading = 'eager';
+  firstLayer.decoding = 'async';
+  firstLayer.fetchPriority = 'high';
+  firstLayer.classList.add('is-active');
+  firstLayer.removeAttribute('aria-hidden');
+  caption.textContent = slides[0].caption;
+
+  document.addEventListener('visibilitychange', scheduleAdvance);
+  reducedMotion.addEventListener('change', scheduleAdvance);
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      scheduleAdvance();
+    }, { threshold: 0.35 });
+    observer.observe(slideshow);
+  } else {
+    isVisible = true;
+    scheduleAdvance();
+  }
 }
 
 export function initializeHeroProjectSlideshow() {
