@@ -24,7 +24,7 @@ The homepage slideshow uses supplied project photographs. Motion effects through
 - Vanilla JavaScript ES modules
 - Vite for local development and production builds
 - Vitest for content and asset-mapping tests
-- `gh-pages` for the optional `gh-pages` branch deployment script
+- GitHub Actions for automatic GitHub Pages deployment
 
 ## Brand palette
 
@@ -69,7 +69,7 @@ Vite prints the local URL in the terminal. Use `Ctrl+C` to stop the server.
 | `npm test` | Run the Vitest suite once. |
 | `npm run build` | Create the optimized production website in `dist/`. |
 | `npm run preview` | Serve the production build locally for a final check. Run `npm run build` first. |
-| `npm run deploy` | Build the site and publish `dist/` to the `gh-pages` branch using `gh-pages`. |
+| GitHub Actions | Build and publish the site when changes reach `main`. |
 
 Before publishing, run:
 
@@ -132,21 +132,32 @@ Project detail copy in `js/projects-data.js` supports reviewed HTML in its secti
 
 ## Deployment
 
-### GitHub Pages at a domain root
+### GitHub Pages
 
-The current Vite configuration uses `base: '/'`, and page styles, scripts, navigation, and images use root-relative paths. This works when the site is served from the domain root, such as a GitHub Pages user/organization site or a custom domain configured at the root.
+The repository includes `.github/workflows/pages.yml`. It builds the four HTML pages and deploys `dist/` whenever a commit reaches `main`. GitHub supplies the correct base path during the build, so the project site works under `/AlShehza_NGO_Website/` and switches to the domain root when a custom domain is configured.
 
-After setting up the repository and GitHub Pages permissions, run:
+To enable deployment:
 
-```sh
-npm run deploy
+1. Push the `main` branch to GitHub.
+2. In the repository, open **Settings → Pages**.
+3. Set **Build and deployment → Source** to **GitHub Actions**.
+4. Open the **Actions** tab and check the **Deploy website to GitHub Pages** workflow. The deployed URL will appear in the workflow run and on the Pages settings page.
+
+The workflow uses GitHub's Pages artifact deployment. Do not select a branch-based `gh-pages` source alongside it.
+
+For a local production preview of the current GitHub project URL, set the base path before building:
+
+```powershell
+$env:VITE_BASE_PATH = "/AlShehza_NGO_Website/"
+npm run build
+npm run preview
 ```
 
-This builds the site and uses `gh-pages` to publish the generated `dist/` directory to the `gh-pages` branch. The command requires a Git remote and credentials with permission to push to the repository.
+For a domain-root host, build with `VITE_BASE_PATH=/`.
 
-### GitHub Pages project subpath or another host
+### Connecting a Namecheap domain later
 
-A project site served from a path such as `https://example.github.io/repository-name/` needs more than a Vite `base` change: the HTML and JavaScript currently use root-relative URLs for assets and page navigation. Before deploying to a subpath, make the Vite base and all application URLs compatible with that subpath, then verify every route and asset in a production preview. Configure the equivalent base path for any other host that serves the site below a domain root.
+After purchasing the domain, first add it under **Settings → Pages → Custom domain** in GitHub and wait for GitHub to verify it. Then configure the DNS records at Namecheap using the values GitHub documents for the chosen apex or `www` hostname, enable **Enforce HTTPS** once available, and wait for DNS propagation. GitHub Actions does not require a committed `CNAME` file. The Pages workflow reads GitHub's configured base path automatically, so the assets will build at `/` for a custom domain. See GitHub's [custom-domain guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site) for the current DNS values and verification steps.
 
 ## Public-repository and privacy notes
 

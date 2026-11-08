@@ -121,7 +121,7 @@ export function renderNavbar(activePage) {
       <div class="scroll-progress" aria-hidden="true"><span class="scroll-progress__fill"></span></div>
       <div class="site-header__inner">
         <a class="site-brand" href="index.html" aria-label="${siteConfig.organization.name} home">
-          <img class="site-brand__logo" src="/assets/images/brand/al-shehza-circle-dark.png" alt="">
+          <img class="site-brand__logo" src="${import.meta.env.BASE_URL}assets/images/brand/al-shehza-circle-dark.png" alt="">
           <span class="site-brand__name">${siteConfig.organization.name}<small>Care • Dignity • Hope</small></span>
         </a>
         <nav class="site-nav" aria-label="Main navigation">${links}</nav>
@@ -146,7 +146,7 @@ export function renderFooter() {
       <div class="site-footer__inner">
         <div class="site-footer__brand">
           <a class="site-brand site-brand--footer" href="index.html">
-            <img class="site-brand__logo" src="/assets/images/brand/al-shehza-primary-light.png" alt="${siteConfig.organization.name}">
+            <img class="site-brand__logo" src="${import.meta.env.BASE_URL}assets/images/brand/al-shehza-primary-light.png" alt="${siteConfig.organization.name}">
           </a>
           <p>${siteConfig.footer.description}</p>
         </div>
