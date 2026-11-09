@@ -144,11 +144,25 @@ export function initializeStoryProjectSlideshow() {
   let activeLayer = 0;
   let slideIndex = 0;
   let isVisible = false;
+  let userPaused = false;
   let timer;
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'story-slideshow-toggle';
+  slideshow.append(toggle);
+
+  const updateToggle = () => {
+    toggle.disabled = reducedMotion.matches;
+    toggle.textContent = reducedMotion.matches ? 'Motion reduced' : userPaused ? 'Play photos' : 'Pause photos';
+    toggle.setAttribute('aria-label', reducedMotion.matches
+      ? 'Automatic story photo rotation is disabled by your motion preference'
+      : `${userPaused ? 'Resume' : 'Pause'} story photo rotation`);
+    toggle.setAttribute('aria-pressed', String(userPaused || reducedMotion.matches));
+  };
 
   const scheduleAdvance = () => {
     window.clearTimeout(timer);
-    if (isVisible && !document.hidden && !reducedMotion.matches && slides.length > 1) {
+    if (isVisible && !document.hidden && !reducedMotion.matches && !userPaused && slides.length > 1) {
       timer = window.setTimeout(() => showSlide(slideIndex + 1), 3000);
     }
   };
@@ -187,9 +201,18 @@ export function initializeStoryProjectSlideshow() {
   firstLayer.classList.add('is-active');
   firstLayer.removeAttribute('aria-hidden');
   caption.textContent = slides[0].caption;
+  toggle.addEventListener('click', () => {
+    userPaused = !userPaused;
+    updateToggle();
+    scheduleAdvance();
+  });
+  updateToggle();
 
-  document.addEventListener('visibilitychange', scheduleAdvance);
-  reducedMotion.addEventListener('change', scheduleAdvance);
+  document.addEventListener('visibilitychange', () => scheduleAdvance());
+  reducedMotion.addEventListener('change', () => {
+    updateToggle();
+    scheduleAdvance();
+  });
 
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(([entry]) => {
@@ -238,14 +261,30 @@ export function initializeHeroProjectSlideshow() {
 
   const layers = [firstLayer, secondLayer];
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (reducedMotion.matches || photos.length < 2) return;
+  if (photos.length < 2) return;
 
   let photoIndex = 0;
   let activeLayer = 0;
   let timer;
+  let isVisible = false;
+  let userPaused = false;
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'home-hero__slideshow-toggle';
+  const figure = container.closest('.home-hero__visual');
+  figure?.append(toggle);
+
+  const updateToggle = () => {
+    toggle.disabled = reducedMotion.matches;
+    toggle.textContent = reducedMotion.matches ? 'Motion reduced' : userPaused ? 'Play photos' : 'Pause photos';
+    toggle.setAttribute('aria-label', reducedMotion.matches
+      ? 'Automatic photo rotation is disabled by your motion preference'
+      : `${userPaused ? 'Resume' : 'Pause'} homepage photo rotation`);
+    toggle.setAttribute('aria-pressed', String(userPaused || reducedMotion.matches));
+  };
 
   const showNextPhoto = () => {
-    if (document.hidden || reducedMotion.matches) return;
+    if (document.hidden || reducedMotion.matches || userPaused || !isVisible) return;
 
     const nextLayer = 1 - activeLayer;
     let nextIndex = photoIndex + 1;
@@ -259,25 +298,44 @@ export function initializeHeroProjectSlideshow() {
       layers[activeLayer].classList.remove('is-active');
       activeLayer = nextLayer;
       photoIndex = nextIndex;
-      timer = window.setTimeout(showNextPhoto, 5200);
+      scheduleAdvance();
     };
     image.onerror = () => {
       console.error(`Unable to load homepage project photo: ${photoSequence[nextIndex]}`);
       photoIndex = nextIndex;
-      timer = window.setTimeout(showNextPhoto, 1000);
+      scheduleAdvance(1000);
     };
     image.src = photoSequence[nextIndex];
   };
 
   const pauseSlideshow = () => window.clearTimeout(timer);
-  const resumeSlideshow = () => {
+  const scheduleAdvance = (delay = 5200) => {
     pauseSlideshow();
-    if (!document.hidden && !reducedMotion.matches) {
-      timer = window.setTimeout(showNextPhoto, 5200);
+    if (isVisible && !document.hidden && !reducedMotion.matches && !userPaused) {
+      timer = window.setTimeout(showNextPhoto, delay);
     }
   };
+  const handleMotionChange = () => {
+    updateToggle();
+    scheduleAdvance();
+  };
+  toggle.addEventListener('click', () => {
+    userPaused = !userPaused;
+    updateToggle();
+    scheduleAdvance();
+  });
+  updateToggle();
 
-  document.addEventListener('visibilitychange', resumeSlideshow);
-  reducedMotion.addEventListener('change', resumeSlideshow);
-  resumeSlideshow();
+  document.addEventListener('visibilitychange', () => scheduleAdvance());
+  reducedMotion.addEventListener('change', handleMotionChange);
+  if ('IntersectionObserver' in window && figure) {
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      scheduleAdvance();
+    }, { threshold: 0.3 });
+    observer.observe(figure);
+  } else {
+    isVisible = true;
+    scheduleAdvance();
+  }
 }

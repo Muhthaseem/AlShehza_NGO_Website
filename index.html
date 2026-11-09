@@ -1,99 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#F7F5EB">
-    <link rel="icon" type="image/png" href="/assets/images/brand/al-shehza-circle-dark.png">
-    <title>Al Shehza Foundation</title>
-    <meta name="description" content="Al Shehza Foundation works to alleviate poverty and restore dignity through community support, clean water, and seasonal relief.">
-    <script>try { document.documentElement.dataset.theme = localStorage.getItem('al-shehza-theme') === 'light' ? 'light' : 'dark'; } catch { document.documentElement.dataset.theme = 'dark'; }</script>
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10120f">
+  <meta name="description" content="Al Shehza Foundation is a non-profit established in 2021, supporting people and families facing hardship through water, food, nourishment, and learning programmes.">
+  <link rel="icon" type="image/png" href="%BASE_URL%assets/images/brand/al-shehza-circle-light.png"><title>Al Shehza Foundation</title>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('al-shehza-theme')==='light'?'light':'dark'}catch{document.documentElement.dataset.theme='dark'}</script>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-    <div id="navbar-container"></div>
-    <main>
-        <section class="home-hero">
-            <div class="home-hero__ambience" aria-hidden="true">
-                <span class="home-hero__ripple home-hero__ripple--one"></span>
-                <span class="home-hero__ripple home-hero__ripple--two"></span>
-                <i class="home-hero__spark home-hero__spark--one"></i>
-                <i class="home-hero__spark home-hero__spark--two"></i>
-                <i class="home-hero__spark home-hero__spark--three"></i>
-                <i class="home-hero__spark home-hero__spark--four"></i>
-                <i class="home-hero__spark home-hero__spark--five"></i>
-            </div>
-            <div class="home-hero__inner page-wrap">
-                <div class="home-hero__copy">
-                    <img class="home-hero__brand-logo" src="/assets/images/brand/al-shehza-primary-dark.png" data-theme-logo-light="assets/images/brand/al-shehza-primary-dark.png" data-theme-logo-dark="assets/images/brand/al-shehza-primary-light.png" alt="Al Shehza Foundation">
-                    <p class="eyebrow"><span class="eyebrow__dot"></span> Community foundation · Established 2021</p>
-                    <h1>Care that meets people <em>where they are.</em></h1>
-                    <p class="home-hero__lead">We stand alongside people and families facing hardship with practical support, access to clean water, and care that respects every person’s dignity.</p>
-                    <div class="button-row">
-                        <a class="button button--primary" href="projects.html">Explore our work <span aria-hidden="true">↗</span></a>
-                        <a class="text-link" href="about.html">Our story <span aria-hidden="true">→</span></a>
-                    </div>
-                </div>
-                <div class="home-hero__art">
-                    <div class="home-hero__slideshow" id="homeProjectSlideshow" aria-hidden="true"></div>
-                    <div class="home-hero__image-shade" aria-hidden="true"></div>
-                    <div class="home-hero__photo-label">
-                        <span><small>Care in action</small><strong>Rooted in community</strong></span>
-                    </div>
-                    <span class="home-hero__since">Serving since 2021</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="stat-strip" aria-label="Foundation at a glance"><div class="page-wrap stat-strip__inner" id="homepageStats"></div></section>
-
-        <section class="section-block intro-block">
-            <div class="page-wrap intro-layout">
-                <div class="section-kicker"><span>01</span> Why we are here</div>
-                <div class="intro-copy">
-                    <h2>Support rooted in <em>dignity.</em></h2>
-                    <p>Al Shehza Foundation (Guarantee) Limited is a non-profit organization established in 2021 to support people and families facing poverty and hardship.</p>
-                    <p>From immediate assistance to community-led infrastructure, we believe everyone deserves care, opportunity, and the chance to live with dignity.</p>
-                    <a class="text-link" href="about.html">Get to know us <span aria-hidden="true">→</span></a>
-                </div>
-            </div>
-        </section>
-
-        <section class="home-programs section-block" aria-labelledby="homeProgramsTitle">
-            <div class="page-wrap">
-                <div class="home-section-heading">
-                    <p class="eyebrow"><span class="eyebrow__dot"></span> How we serve</p>
-                    <h2 id="homeProgramsTitle">Care for everyday <em>needs.</em></h2>
-                    <p>Practical support shaped around people, families, and the needs they share with us.</p>
-                </div>
-                <div class="pillar-grid" id="homepageProgramPillars"></div>
-            </div>
-        </section>
-
-        <section class="home-featured section-block" aria-labelledby="homeFeaturedTitle">
-            <div class="page-wrap">
-                <div class="home-section-heading home-section-heading--row">
-                    <div><p class="eyebrow"><span class="eyebrow__dot"></span> From our community</p><h2 id="homeFeaturedTitle">A glimpse of the <em>work.</em></h2></div>
-                    <a class="text-link" href="projects.html">Explore all initiatives <span aria-hidden="true">→</span></a>
-                </div>
-                <div class="home-featured__grid" id="homepageFeaturedWork"></div>
-            </div>
-        </section>
-
-        <section class="home-cta">
-            <div class="page-wrap home-cta__inner">
-                <div><p class="eyebrow">The work continues</p><h2>A more dignified future is built <em>together.</em></h2></div>
-                <a class="button button--light" href="contact.html">Contact the foundation <span aria-hidden="true">↗</span></a>
-            </div>
-        </section>
-    </main>
-    <div id="footer-container"></div>
-    <script type="module">
-        import { initializeSite } from './js/main.js';
-        import { initializeHeroProjectSlideshow, renderHomeContent } from './js/content-pages.js';
-        initializeSite('index.html');
-        renderHomeContent();
-        initializeHeroProjectSlideshow();
-    </script>
-</body>
-</html>
+<body><a class="skip-link" href="#main">Skip to content</a><div id="navbar-container"></div>
+<main id="main">
+  <section class="journal-hero"><div class="wrap">
+    <div class="journal-hero__top"><p class="eyebrow"><span>FIELD JOURNAL / 01</span><span>AL SHEHZA FOUNDATION</span></p><span class="issue-mark">COMMUNITY<br>CARE<br><b>2021—</b></span></div>
+    <div class="journal-hero__layout"><div class="journal-hero__copy"><h1>Care is a<br>community <span>effort.</span></h1><p class="lead">Al Shehza Foundation is a non-profit organization supporting people and families facing hardship with practical programmes for water, food, nourishment, and learning.</p><div class="actions"><a class="button button--primary" href="projects.html">Explore the programmes <span aria-hidden="true">↗</span></a><a class="text-link" href="about.html">Why we do this <span aria-hidden="true">→</span></a></div><p class="hero-note"><span class="hero-note__dot"></span> ESTABLISHED IN 2021 · AL SHEHZA FOUNDATION (GUARANTEE) LIMITED</p></div>
+      <figure class="journal-hero__photo"><div class="journal-hero__slideshow" id="homeProjectSlideshow" aria-hidden="true"></div><span class="photo-index">01 / COMMUNITY</span><figcaption><b>Care in action</b><span>Shared water access · Community well</span></figcaption></figure></div>
+    <div class="service-ribbon" aria-label="Areas of work"><span>WATER ACCESS</span><i>✳</i><span>FOOD SUPPORT</span><i>✳</i><span>CHILDREN’S NOURISHMENT</span><i>✳</i><span>LEARNING RESOURCES</span></div>
+  </div></section>
+  <section class="manifesto section" id="purpose"><div class="wrap manifesto__grid"><div class="section-index"><span>01</span><span>OUR PURPOSE</span></div><div><h2>Meeting essential needs with care, respect, and <em>community.</em></h2><div class="manifesto__bottom"><p>Established in 2021, the foundation works to ease poverty and hardship through practical community initiatives. Its programmes bring water closer to households and shared spaces, provide food support, and make nourishment and learning resources available to children.</p><a class="round-link" href="about.html" aria-label="Read the foundation story">↗</a></div></div></div></section>
+  <section class="programme-section section"><div class="wrap"><header class="section-heading section-heading--split"><div><p class="eyebrow">WHAT WE DO / 02</p><h2>Support built around<br><span>everyday essentials.</span></h2></div><p>Each programme responds to a practical need identified in the foundation’s community work.</p></header><div class="programme-index" id="homepageProgramPillars"></div></div></section>
+  <section class="dispatches section"><div class="wrap"><header class="section-heading section-heading--split"><div><p class="eyebrow">FROM THE FIELD / 03</p><h2>Community work,<br><span>in focus.</span></h2></div><a class="button button--outline" href="projects.html">All seven initiatives <span aria-hidden="true">↗</span></a></header><div class="dispatch-grid" id="homepageFeaturedWork"></div></div></section>
+  <section class="closing-banner"><div class="wrap closing-banner__inner"><p class="eyebrow">THE WORK CONTINUES</p><h2>Care grows when<br>we show up <em>together.</em></h2><a class="button button--dark" href="contact.html">Connect with the foundation <span aria-hidden="true">↗</span></a><span class="closing-banner__stamp">CARE<br>IS<br>ACTION</span></div></section>
+</main><div id="footer-container"></div>
+<script type="module">import{initializeSite}from'./js/main.js';import{initializeHeroProjectSlideshow,renderHomeContent}from'./js/content-pages.js';initializeSite('index.html');renderHomeContent();initializeHeroProjectSlideshow();</script>
+</body></html>

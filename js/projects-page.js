@@ -43,6 +43,10 @@ function createCarousel(project) {
   indicators.className = 'work-carousel__indicators';
   indicators.setAttribute('role', 'group');
   indicators.setAttribute('aria-label', 'Choose a project photo');
+  const rotationToggle = document.createElement('button');
+  rotationToggle.type = 'button';
+  rotationToggle.className = 'work-carousel__toggle';
+  rotationToggle.setAttribute('aria-pressed', 'false');
   const dots = project.images.map((_, index) => {
     const dot = document.createElement('button');
     dot.type = 'button';
@@ -52,13 +56,23 @@ function createCarousel(project) {
     indicators.append(dot);
     return dot;
   });
-  if (project.images.length > 1) controls.append(indicators);
+  if (project.images.length > 1) controls.append(rotationToggle, indicators);
   visual.append(figure);
   if (project.images.length > 1) visual.append(controls);
 
   let imageIndex = 0;
   let autoAdvance;
   let isVisible = false;
+  let autoPaused = false;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const updateRotationToggle = () => {
+    rotationToggle.disabled = reducedMotion.matches;
+    rotationToggle.textContent = reducedMotion.matches ? 'Motion reduced' : autoPaused ? 'Play photos' : 'Pause photos';
+    rotationToggle.setAttribute('aria-label', reducedMotion.matches
+      ? `Automatic photo rotation disabled by motion preference for ${project.title}`
+      : `${autoPaused ? 'Resume' : 'Pause'} automatic photo rotation for ${project.title}`);
+    rotationToggle.setAttribute('aria-pressed', String(autoPaused || reducedMotion.matches));
+  };
   const updateIndicators = () => {
     dots.forEach((dot, index) => {
       if (index === imageIndex) {
@@ -72,7 +86,7 @@ function createCarousel(project) {
   };
   const scheduleAdvance = () => {
     window.clearTimeout(autoAdvance);
-    if (isVisible && project.images.length > 1 && !document.hidden) {
+    if (isVisible && project.images.length > 1 && !document.hidden && !reducedMotion.matches && !autoPaused) {
       autoAdvance = window.setTimeout(() => showImage(1), 3000);
     }
   };
@@ -113,6 +127,12 @@ function createCarousel(project) {
   const showImage = direction => {
     showImageAt(imageIndex + direction, direction);
   };
+  rotationToggle.addEventListener('click', () => {
+    autoPaused = !autoPaused;
+    updateRotationToggle();
+    scheduleAdvance();
+  });
+  updateRotationToggle();
   updateIndicators();
   figure.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft') showImageAt(imageIndex - 1, -1);
@@ -137,6 +157,10 @@ function createCarousel(project) {
   });
   figure.addEventListener('pointercancel', () => { pointerStart = null; });
   document.addEventListener('visibilitychange', scheduleAdvance);
+  reducedMotion.addEventListener('change', () => {
+    updateRotationToggle();
+    scheduleAdvance();
+  });
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting;
@@ -216,6 +240,7 @@ function initializeProjectFilters() {
     { label: 'Faith & learning', matches: category => /faith|quran|qurban/i.test(category) },
   ];
   const cards = [...grid.querySelectorAll('.work-card')];
+  if (status) status.textContent = `${cards.length} ${cards.length === 1 ? 'initiative' : 'initiatives'} shown`;
 
   groups.forEach((group, index) => {
     const button = document.createElement('button');
@@ -228,8 +253,12 @@ function initializeProjectFilters() {
       cards.forEach(card => {
         const category = `${card.querySelector('.work-card__eyebrow')?.textContent || ''} ${card.querySelector('h3')?.textContent || ''}`;
         const visible = group.matches(category);
+        card.classList.remove('filter-enter');
         card.hidden = !visible;
-        if (visible) visibleCount += 1;
+        if (visible) {
+          visibleCount += 1;
+          window.requestAnimationFrame(() => card.classList.add('filter-enter'));
+        }
       });
       filters.querySelectorAll('.work-filter').forEach(filter => {
         filter.setAttribute('aria-pressed', String(filter === button));

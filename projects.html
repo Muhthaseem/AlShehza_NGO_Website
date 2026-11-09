@@ -1,49 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#F7F5EB">
-    <link rel="icon" type="image/png" href="/assets/images/brand/al-shehza-circle-dark.png">
-    <title>Our Work | Al Shehza Foundation</title>
-    <meta name="description" content="Explore Al Shehza Foundation projects in community water, food support, children’s nourishment, Qurban, and Quran learning.">
-    <script>try { document.documentElement.dataset.theme = localStorage.getItem('al-shehza-theme') === 'light' ? 'light' : 'dark'; } catch { document.documentElement.dataset.theme = 'dark'; }</script>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-    <div id="navbar-container"></div>
-    <main>
-        <section class="work-hero">
-            <div class="work-hero__inner page-wrap">
-                <div class="work-hero__copy">
-                    <p class="eyebrow"><span class="eyebrow__dot"></span> Our work · Care in action</p>
-                    <h1>Practical care,<br><em>where it matters.</em></h1>
-                    <p>From water for daily life to food, nourishment, and faith-based giving, our initiatives respond to needs shared with us by the community.</p>
-                    <a class="work-hero__link" href="#projectGrid">Explore our initiatives <span aria-hidden="true">↓</span></a>
-                </div>
-                <div class="work-hero__collage" aria-label="Scenes from our community projects">
-                    <figure class="work-hero__photo work-hero__photo--water"><img src="/assets/images/community_water_well_donation/12.jpeg" alt="Shared community water point"></figure>
-                    <figure class="work-hero__photo work-hero__photo--food"><img src="/assets/images/rice_bag_donation/7.png" alt="Rice donation for households"></figure>
-                    <figure class="work-hero__photo work-hero__photo--iftar"><img src="/assets/images/iftar_food_donation/1.png" alt="Food prepared for community iftar"></figure>
-                    <span class="work-hero__label">A little care can go a long way</span>
-                </div>
-                <div class="work-hero__footer"><span>AL SHEHZA FOUNDATION</span><span>Essential support · Shared with dignity</span></div>
-            </div>
-        </section>
-        <section class="work-section section-block"><div class="page-wrap">
-            <div class="work-section__heading"><p class="eyebrow">Programs & initiatives</p><h2>Care made <em>practical.</em></h2><p>Explore the ways we share essential resources, support learning, and stand alongside people in need.</p></div>
-            <nav class="work-filters" id="projectFilters" aria-label="Filter initiatives"></nav>
-            <p class="sr-only" id="projectFilterStatus" aria-live="polite"></p>
-            <div class="work-grid" id="projectGrid"></div>
-        </div></section>
-        <section class="work-note"><div class="page-wrap work-note__inner"><p>Our work is grounded in</p><h2>Empathy. Transparency. <em>Community.</em></h2><a class="button button--primary" href="contact.html">Meet our leadership <span aria-hidden="true">↗</span></a></div></section>
-    </main>
-    <div id="footer-container"></div>
-    <script type="module">
-        import { initializeSite } from './js/main.js';
-        import { initializeProjectsPage } from './js/projects-page.js';
-        initializeSite('projects.html');
-        initializeProjectsPage();
-    </script>
-</body>
-</html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10120f"><meta name="description" content="Explore seven Al Shehza Foundation initiatives in community and household water, food assistance, children’s nourishment, Qurban, and Quran learning."><link rel="icon" type="image/png" href="%BASE_URL%assets/images/brand/al-shehza-circle-light.png"><title>Our Work | Al Shehza Foundation</title><script>try{document.documentElement.dataset.theme=localStorage.getItem('al-shehza-theme')==='light'?'light':'dark'}catch{document.documentElement.dataset.theme='dark'}</script><link rel="stylesheet" href="/css/style.css"></head>
+<body><a class="skip-link" href="#main">Skip to content</a><div id="navbar-container"></div><main id="main">
+  <section class="index-hero"><div class="wrap"><p class="eyebrow"><span>PROGRAMME INDEX / 02</span><span>SEVEN INITIATIVES</span></p><div class="index-hero__grid"><h1>Practical support.<br><em>Specific needs.</em></h1><div><p class="lead">From community water facilities to food assistance and children’s learning resources, explore the foundation’s current programmes and what each one provides.</p><a class="text-link" href="#initiatives">Browse the index <span aria-hidden="true">↓</span></a></div></div><div class="index-hero__rule"><span>AL SHEHZA FOUNDATION</span><span>WATER · FOOD · NOURISHMENT · LEARNING</span></div></div></section>
+  <section class="initiatives section" id="initiatives"><div class="wrap"><div class="initiative-toolbar"><div><p class="eyebrow">Choose an area</p><p class="initiative-toolbar__hint">Filter programmes by their focus.</p></div><nav class="work-filters" id="projectFilters" aria-label="Filter initiatives"></nav></div><p class="sr-only" id="projectFilterStatus" aria-live="polite"></p><div class="work-grid" id="projectGrid"></div></div></section>
+  <section class="work-contact"><div class="wrap work-contact__inner"><span>HAVE A QUESTION ABOUT A PROGRAMME?</span><a href="contact.html">Get in touch with the foundation <b aria-hidden="true">↗</b></a></div></section>
+</main><div id="footer-container"></div><script type="module">import{initializeSite}from'./js/main.js';import{initializeProjectsPage}from'./js/projects-page.js';initializeSite('projects.html');initializeProjectsPage();</script></body></html>

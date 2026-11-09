@@ -19,7 +19,12 @@ function initNavbar() {
       const progress = scrollableDistance > 0 ? Math.min(window.scrollY / scrollableDistance, 1) : 0;
       navbar.classList.toggle('is-scrolled', window.scrollY > 24);
       if (scrollProgress) scrollProgress.style.transform = `scaleX(${progress})`;
-      if (backToTop) backToTop.classList.toggle('is-visible', window.scrollY > 420);
+      if (backToTop) {
+        const visible = window.scrollY > 420;
+        backToTop.classList.toggle('is-visible', visible);
+        backToTop.tabIndex = visible ? 0 : -1;
+        backToTop.setAttribute('aria-hidden', String(!visible));
+      }
       updateScheduled = false;
     };
     const scheduleScrollUI = () => {
@@ -42,16 +47,23 @@ function initNavbar() {
   }
 
   if (menuButton && mobileMenu) {
+    const closeMenu = () => {
+      menuButton.setAttribute('aria-expanded', 'false');
+      mobileMenu.hidden = true;
+    };
     menuButton.addEventListener('click', () => {
       const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
       menuButton.setAttribute('aria-expanded', String(!isOpen));
       mobileMenu.hidden = isOpen;
     });
     mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        menuButton.setAttribute('aria-expanded', 'false');
-        mobileMenu.hidden = true;
-      });
+      link.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        menuButton.focus();
+      }
     });
   }
 }
@@ -85,32 +97,21 @@ function initThemeToggle() {
 
 function initScrollReveal() {
   const revealTargets = [
-    '.home-hero__copy',
-    '.home-hero__art',
-    '.hero-bottom',
-    '.stat-card',
-    '.intro-layout > *',
-    '.section-heading',
+    '.journal-hero__copy',
+    '.journal-hero__photo',
+    '.manifesto__grid > *',
     '.pillar-card',
-    '.home-cta__inner > *',
-    '.page-intro__inner > *',
-    '.story-layout > *',
-    '.value-card',
-    '.approach-layout > *',
-    '.work-section__heading',
+    '.home-feature-card',
+    '.closing-banner__inner > *',
+    '.index-hero__grid > *',
     '.work-card',
-    '.work-note__inner > *',
-    '.leadership-layout > *',
-    '.leader-card',
-    '.fieldnotes-cover__panel',
-    '.fieldnotes-cover__photo',
-    '.fieldnotes-origin__marker',
-    '.fieldnotes-origin__copy',
-    '.fieldnotes-work__heading',
-    '.fieldnote-entry',
-    '.fieldnotes-values__intro',
-    '.fieldnotes-values__list article',
-    '.fieldnotes-future__inner > *',
+    '.story-cover__grid > *',
+    '.origin-grid > *',
+    '.purpose-wall__grid article',
+    '.story-programme-list article',
+    '.values-board__grid > *',
+    '.contact-masthead__grid > *',
+    '.founder-card > *',
     '.site-footer__inner > *',
   ];
   const reveals = document.querySelectorAll(revealTargets.join(','));
@@ -122,7 +123,8 @@ function initScrollReveal() {
     element.classList.add('reveal');
   });
 
-  if (!reveals.length || !('IntersectionObserver' in window)) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    || !reveals.length || !('IntersectionObserver' in window)) {
     reveals.forEach(element => element.classList.add('is-visible'));
     return;
   }
@@ -139,9 +141,10 @@ function initScrollReveal() {
 }
 
 export function renderNavbar(activePage) {
-  const logo = `${import.meta.env.BASE_URL}assets/images/brand/al-shehza-circle-dark.png`;
+  const logoLight = `${import.meta.env.BASE_URL}assets/images/brand/al-shehza-circle-dark.png`;
+  const logoDark = `${import.meta.env.BASE_URL}assets/images/brand/al-shehza-circle-light.png`;
   const links = siteConfig.navigation.map(page =>
-    `<a class="site-nav__link${page.href === activePage ? ' is-active' : ''}" href="${page.href}">${page.name}</a>`
+    `<a class="site-nav__link${page.href === activePage ? ' is-active' : ''}" href="${page.href}"${page.href === activePage ? ' aria-current="page"' : ''}>${page.name}</a>`
   ).join('');
 
   return `
@@ -149,7 +152,7 @@ export function renderNavbar(activePage) {
       <div class="scroll-progress" aria-hidden="true"><span class="scroll-progress__fill"></span></div>
       <div class="site-header__inner">
         <a class="site-brand" href="index.html" aria-label="${siteConfig.organization.name} home">
-          <img class="site-brand__logo" src="${logo}" alt="">
+          <img class="site-brand__logo" src="${logoDark}" data-theme-logo-light="${logoLight}" data-theme-logo-dark="${logoDark}" alt="">
           <span class="site-brand__name">${siteConfig.organization.name}<small>Care • Dignity • Hope</small></span>
         </a>
         <nav class="site-nav" aria-label="Main navigation">${links}</nav>
@@ -217,7 +220,9 @@ export function initializeSite(page) {
   const pageKey = page === 'index.html' ? 'home' : page.replace(/\.html$/, '');
   const pageConfig = siteConfig.pages[pageKey];
   if (pageConfig) {
-    document.title = `${pageConfig.title} | ${siteConfig.organization.name}`;
+    document.title = pageKey === 'home'
+      ? siteConfig.organization.name
+      : `${pageConfig.title} | ${siteConfig.organization.name}`;
     document.querySelector('meta[name="description"]')?.setAttribute('content', pageConfig.description);
   }
 }
